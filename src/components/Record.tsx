@@ -96,17 +96,8 @@ const Record = ({
         onMouseLeave={() => setShowControls(false)}
       >
         {(showControls || isEditing) && (
-          <Buttons isEditing={isEditing}>
-            {isEditing ? (
-              <>
-                <button onClick={handleCancel} title="Cancel">
-                  <MdCancel size={30} />
-                </button>
-                <button onClick={handleSave} title="Save">
-                  <MdSave size={30} />
-                </button>
-              </>
-            ) : (
+          <Buttons>
+            {!isEditing && (
               <>
                 <button onClick={handleDelete} title="Delete">
                   <MdDelete size={30} />
@@ -118,38 +109,64 @@ const Record = ({
             )}
           </Buttons>
         )}
-        {!isEditing && record ? (
-          <RecordDetails>
-            <Title>{record.album_title}</Title>
-            <ArtistYear onClick={() => handleArtistSearch(record.artist.name)}>
-              <Artist>{record.artist.name}</Artist> • {record.year}
-            </ArtistYear>
-            <Condition>Condition: {record.condition}</Condition>
-          </RecordDetails>
-        ) : (
-          <>
-            <input
-              value={title}
-              placeholder="Title"
-              onChange={({ target }) => setTitle(target.value)}
-            />
-            <input
-              value={artist}
-              placeholder="Artist"
-              onChange={({ target }) => setArtist(target.value)}
-            />
-            <input
-              value={year}
-              placeholder="Year"
-              onChange={({ target }) => setYear(+target.value)}
-            />
-            <input
-              value={condition}
-              placeholder="Condition"
-              onChange={({ target }) => setCondition(target.value)}
-            />
-          </>
-        )}
+        <AlbumContents>
+          {!isEditing && record ? (
+            <RecordDetails>
+              <Title>{record.album_title}</Title>
+              <ArtistYear
+                onClick={() => handleArtistSearch(record.artist.name)}
+              >
+                <Artist>{record.artist.name}</Artist> • {record.year}
+              </ArtistYear>
+              <Condition>Condition: {record.condition}</Condition>
+            </RecordDetails>
+          ) : (
+            <Inputs>
+              <Label>
+                Album Title
+                <Input
+                  value={title}
+                  placeholder="Title"
+                  onChange={({ target }) => setTitle(target.value)}
+                />
+              </Label>
+              <Label>
+                Artist
+                <Input
+                  value={artist}
+                  placeholder="Artist"
+                  onChange={({ target }) => setArtist(target.value)}
+                />
+              </Label>
+              <Label>
+                Year
+                <Input
+                  value={year}
+                  placeholder="Year"
+                  onChange={({ target }) => setYear(+target.value)}
+                />
+              </Label>
+              <Label>
+                Condition
+                <Input
+                  value={condition}
+                  placeholder="Condition"
+                  onChange={({ target }) => setCondition(target.value)}
+                />
+              </Label>
+              <FormButtons>
+                <button onClick={handleCancel} title="Cancel">
+                  {/* <MdCancel size={30} /> */}
+                  Cancel
+                </button>
+                <button onClick={handleSave} title="Save">
+                  {/* <MdSave size={30} /> */}
+                  Save
+                </button>
+              </FormButtons>
+            </Inputs>
+          )}
+        </AlbumContents>
       </RecordContainer>
     </RecordOverlay>
   );
@@ -181,21 +198,26 @@ const RecordContainer = styled.div<{ color?: string; modal?: boolean }>(
     }
 );
 
-const RecordDetails = styled.div({
-  border: '1px solid #999',
-  color: '#999',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  textAlign: 'center',
-  padding: 8,
+const AlbumContents = styled.div({
   width: 250,
   height: 250,
   '@media (max-width: 500px)': {
     width: 150,
     height: 150,
   },
+});
+
+const RecordDetails = styled.div({
+  border: '1px solid #ddd',
+  color: '#ddd',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  textAlign: 'center',
+  padding: 8,
+  width: '100%',
+  height: '100%',
 });
 
 const RecordOverlay = styled.div<{ show?: boolean }>(
@@ -211,12 +233,11 @@ const RecordOverlay = styled.div<{ show?: boolean }>(
     }
 );
 
-const Buttons = styled.div<{ isEditing: boolean }>(({ isEditing }) => ({
+const Buttons = styled.div({
   position: 'absolute',
-  top: !isEditing ? 0 : undefined,
-  bottom: isEditing ? 0 : undefined,
+  top: 0,
   right: 0,
-}));
+});
 
 const Title = styled.div({ fontSize: 24, fontWeight: 'bold', marginBottom: 8 });
 
@@ -230,5 +251,34 @@ const Artist = styled.span({
   textDecoration: 'underline',
 });
 const Condition = styled.div({ fontSize: 14 });
+
+const Inputs = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  height: '100%',
+});
+
+const Label = styled.label({
+  display: 'flex',
+  flexDirection: 'column',
+  color: '#ddd',
+});
+
+const Input = styled.input({
+  paddingLeft: 8,
+  border: 'none',
+  height: 24,
+  borderRadius: 4,
+  marginTop: 4,
+  marginBottom: 8,
+});
+
+const FormButtons = styled.div({
+  display: 'grid',
+  gridTemplateColumns: 'auto auto',
+  columnGap: 8,
+  marginTop: 16,
+});
 
 export default Record;
