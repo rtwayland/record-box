@@ -41,10 +41,7 @@ const recordReducer = (state = initialState, action: Action): RecordState => {
         recordToUpdate?.artist.name !== payload.artist.name;
       const newRecords = state.records.map((record) => {
         if (record.id === payload.id) return payload;
-        else if (
-          updateAllArtists &&
-          record.artist.name === recordToUpdate?.artist.name
-        ) {
+        else if (updateAllArtists && record.artist.id === payload.artist.id) {
           const newRecord = {
             ...record,
             artist: {
