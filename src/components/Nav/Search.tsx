@@ -12,7 +12,7 @@ const Search = () => {
   return (
     <Input
       value={searchValue}
-      placeholder="Search..."
+      placeholder="Search artist or album..."
       onChange={handleChange}
     />
   );
