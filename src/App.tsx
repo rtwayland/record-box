@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useContext } from 'react';
+import { getRecords } from './api';
+import { SET_NEXT_PAGE, SET_RECORDS } from './constants';
+import { store } from './store';
+import Nav from './components/Nav';
+import Records from './components/RecordList';
 
-function App() {
+const App = () => {
+  const [{ records, nextPage }, dispatch] = useContext(store);
+  const loadMoreRecords = async () => {
+    if (nextPage) {
+      const { results: recs, nextPage: next } = await getRecords(nextPage);
+      dispatch({ type: SET_RECORDS, payload: [...records, ...recs] });
+      dispatch({ type: SET_NEXT_PAGE, payload: next });
+    }
+  };
+
+  useEffect(() => {
+    const setRecords = async () => {
+      const { results: recs, nextPage: next } = await getRecords();
+      dispatch({ type: SET_RECORDS, payload: recs });
+      dispatch({ type: SET_NEXT_PAGE, payload: next });
+    };
+
+    if (!records?.length) setRecords();
+  }, [records, dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Nav />
+      <h1>Records</h1>
+      <Records loadMoreRecords={loadMoreRecords} />
     </div>
   );
-}
+};
 
 export default App;
