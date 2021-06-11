@@ -1,4 +1,5 @@
 import { useEffect, useContext } from 'react';
+import styled from '@emotion/styled';
 import { getRecords } from './api';
 import { SET_NEXT_PAGE, SET_RECORDS } from './constants';
 import { store } from './store';
@@ -49,11 +50,22 @@ const App = () => {
   return (
     <div>
       <Nav />
-      <h1>Records</h1>
-      <Records loadMoreRecords={loadMoreRecords} />
+      <Container>
+        <h1>Records</h1>
+        <Records loadMoreRecords={loadMoreRecords} />
+      </Container>
       {showAddRecord && <Record modal />}
     </div>
   );
 };
+
+const Container = styled.div({
+  margin: '0 auto',
+  padding: 24,
+  boxSizing: 'border-box',
+  maxWidth: 1450,
+  overflow: 'auto',
+  height: 'calc(100vh - 80px)',
+});
 
 export default App;

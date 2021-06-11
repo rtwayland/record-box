@@ -2,11 +2,13 @@ import React, { useContext, useState } from 'react';
 import styled from '@emotion/styled';
 import { v4 as uuid } from 'uuid';
 import randomHex from 'random-hex-color';
+import { MdCancel, MdSave, MdDelete, MdEdit } from 'react-icons/md';
 import { Record as RecordType } from '../types';
 import { store } from '../store';
 import {
   ADD_RECORD,
   DELETE_RECORD,
+  SET_SEARCH_VALUE,
   SHOW_ADD_RECORD,
   UPDATE_RECORD,
 } from '../constants';
@@ -20,6 +22,7 @@ const Record = ({
   color?: string;
   modal?: boolean;
 }) => {
+  const colors = ['#40383d', '#525252', '#323232', '#9F5344'];
   // const hex = randomHex();
   // const bgColor = hex.replace('#', '');
   // const density = 50;
@@ -27,6 +30,7 @@ const Record = ({
   // const background = `http://api.thumbr.it/whitenoise-370x370.png?background=${bgColor}ff&noise=626262&density=${density}&opacity=${opacity}`;
   const [{ showAddRecord }, dispatch] = useContext(store);
   const [isEditing, setIsEditing] = useState(modal || false);
+  const [showControls, setShowControls] = useState(false);
   const [title, setTitle] = useState(record?.album_title || '');
   const [artist, setArtist] = useState(record?.artist.name || '');
   const [year, setYear] = useState(record?.year || '');
@@ -79,29 +83,49 @@ const Record = ({
     dispatch({ type: DELETE_RECORD, payload: record });
   };
 
+  const handleArtistSearch = (name: string) => {
+    dispatch({ type: SET_SEARCH_VALUE, payload: name });
+  };
+
   return (
     <RecordOverlay show={!!modal}>
-      <RecordContainer color={color || ''} modal={!!modal}>
-        <Buttons>
-          {isEditing ? (
-            <>
-              <button onClick={handleCancel}>Cancel</button>
-              <button onClick={handleSave}>Save</button>
-            </>
-          ) : (
-            <>
-              <button onClick={handleDelete}>Delete</button>
-              <button onClick={() => setIsEditing(true)}>Edit</button>
-            </>
-          )}
-        </Buttons>
+      <RecordContainer
+        color={color || ''}
+        modal={!!modal}
+        onMouseEnter={() => setShowControls(true)}
+        onMouseLeave={() => setShowControls(false)}
+      >
+        {(showControls || isEditing) && (
+          <Buttons isEditing={isEditing}>
+            {isEditing ? (
+              <>
+                <button onClick={handleCancel} title="Cancel">
+                  <MdCancel size={30} />
+                </button>
+                <button onClick={handleSave} title="Save">
+                  <MdSave size={30} />
+                </button>
+              </>
+            ) : (
+              <>
+                <button onClick={handleDelete} title="Delete">
+                  <MdDelete size={30} />
+                </button>
+                <button onClick={() => setIsEditing(true)} title="Edit">
+                  <MdEdit size={30} />
+                </button>
+              </>
+            )}
+          </Buttons>
+        )}
         {!isEditing && record ? (
-          <>
+          <RecordDetails>
             <Title>{record.album_title}</Title>
-            <Artist>{record.artist.name}</Artist>
-            <Year>{record.year}</Year>
-            <Condition>{record.condition}</Condition>
-          </>
+            <ArtistYear onClick={() => handleArtistSearch(record.artist.name)}>
+              <Artist>{record.artist.name}</Artist> • {record.year}
+            </ArtistYear>
+            <Condition>Condition: {record.condition}</Condition>
+          </RecordDetails>
         ) : (
           <>
             <input
@@ -133,14 +157,20 @@ const Record = ({
 
 const RecordContainer = styled.div<{ color?: string; modal?: boolean }>(
   ({ color }) => ({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     width: 370,
     height: 370,
-    border: '1px solid',
     borderRadius: 4,
-    backgroundColor: color || '#222',
+    background: 'linear-gradient(45deg, rgb(50,50,50) 10%, rgb(82,82,82) 100%)',
     position: 'relative',
-    // backgroundImage: `url(${url})`,
-    // backgroundUrl: url,
+    padding: 40,
+    margin: 8,
+    '@media (max-width: 500px)': {
+      width: 245,
+      height: 245,
+    },
   }),
   ({ modal }) =>
     modal && {
@@ -150,6 +180,23 @@ const RecordContainer = styled.div<{ color?: string; modal?: boolean }>(
       transform: 'translate(-50%,-50%)',
     }
 );
+
+const RecordDetails = styled.div({
+  border: '1px solid #999',
+  color: '#999',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  textAlign: 'center',
+  padding: 8,
+  width: 250,
+  height: 250,
+  '@media (max-width: 500px)': {
+    width: 150,
+    height: 150,
+  },
+});
 
 const RecordOverlay = styled.div<{ show?: boolean }>(
   ({ show }) =>
@@ -164,15 +211,24 @@ const RecordOverlay = styled.div<{ show?: boolean }>(
     }
 );
 
-const Buttons = styled.div({
+const Buttons = styled.div<{ isEditing: boolean }>(({ isEditing }) => ({
   position: 'absolute',
-  top: 0,
+  top: !isEditing ? 0 : undefined,
+  bottom: isEditing ? 0 : undefined,
   right: 0,
+}));
+
+const Title = styled.div({ fontSize: 24, fontWeight: 'bold', marginBottom: 8 });
+
+const ArtistYear = styled.div({
+  fontSize: 18,
+  marginBottom: 8,
 });
 
-const Title = styled.div({});
-const Artist = styled.div({});
-const Year = styled.div({});
-const Condition = styled.div({});
+const Artist = styled.span({
+  cursor: 'pointer',
+  textDecoration: 'underline',
+});
+const Condition = styled.div({ fontSize: 14 });
 
 export default Record;

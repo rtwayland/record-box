@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useContext } from 'react';
+import { MdAddCircle } from 'react-icons/md';
 import { SHOW_ADD_RECORD } from '../../constants';
 import { store } from '../../store';
 import Search from './Search';
@@ -14,17 +15,18 @@ const Nav = () => {
     <NavBar>
       <Logo>Record Box</Logo>
       <Search />
-      {/* <Right>
-      </Right> */}
-      <button onClick={showAddRecord}>Add +</button>
+      <button onClick={showAddRecord} title="Add">
+        <MdAddCircle size={30} />
+      </button>
     </NavBar>
   );
 };
 
 const NavBar = styled.header({
-  display: 'flex',
+  display: 'grid',
   alignItems: 'center',
-  justifyContent: 'space-between',
+  gridTemplateColumns: 'auto 1fr auto',
+  columnGap: 24,
   padding: '8px 16px',
   width: '100%',
   height: 55,

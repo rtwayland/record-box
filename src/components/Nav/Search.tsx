@@ -18,6 +18,10 @@ const Search = () => {
   );
 };
 
-const Input = styled.input({});
+const Input = styled.input({
+  height: 32,
+  fontSize: 18,
+  paddingLeft: 8,
+});
 
 export default Search;
