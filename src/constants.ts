@@ -7,3 +7,5 @@ export const ADD_RECORD = 'ADD_RECORD';
 export const SET_NEXT_PAGE = 'SET_NEXT_PAGE';
 
 export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE';
+
+export const SHOW_ADD_RECORD = 'SHOW_ADD_RECORD';

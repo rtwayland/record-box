@@ -4,19 +4,20 @@ import { SET_NEXT_PAGE, SET_RECORDS } from './constants';
 import { store } from './store';
 import Nav from './components/Nav';
 import Records from './components/RecordList';
-import { Record } from './types';
+import Record from './components/Record';
+import { Record as RecordType } from './types';
 
 const App = () => {
-  const [{ records, nextPage }, dispatch] = useContext(store);
+  const [{ records, nextPage, showAddRecord }, dispatch] = useContext(store);
   const getSyncedNewRecords = (
-    originalRecords: Record[],
-    newRecords: Record[]
+    originalRecords: RecordType[],
+    newRecords: RecordType[]
   ) => {
-    const names: { [key: number]: string } = {};
+    const names: { [key: string]: string } = {};
     originalRecords.forEach(
-      (record: Record) => (names[record.artist.id] = record.artist.name)
+      (record: RecordType) => (names[record.artist.id] = record.artist.name)
     );
-    const updatedNewRecords = newRecords.map((record: Record) => {
+    const updatedNewRecords = newRecords.map((record: RecordType) => {
       const name = names[record.artist.id] || record.artist.name;
       return {
         ...record,
@@ -50,6 +51,7 @@ const App = () => {
       <Nav />
       <h1>Records</h1>
       <Records loadMoreRecords={loadMoreRecords} />
+      {showAddRecord && <Record modal />}
     </div>
   );
 };

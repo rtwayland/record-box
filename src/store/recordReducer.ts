@@ -3,6 +3,8 @@ import {
   SET_NEXT_PAGE,
   SET_SEARCH_VALUE,
   DELETE_RECORD,
+  SHOW_ADD_RECORD,
+  ADD_RECORD,
 } from './../constants';
 import { Record } from '../types';
 import { UPDATE_RECORD } from '../constants';
@@ -11,6 +13,7 @@ export type RecordState = {
   searchValue: string;
   records: Record[];
   nextPage: string | null;
+  showAddRecord: boolean;
 };
 
 export type Action = {
@@ -22,6 +25,7 @@ export const initialState: RecordState = {
   searchValue: '',
   records: [],
   nextPage: null,
+  showAddRecord: false,
 };
 
 const recordReducer = (state = initialState, action: Action): RecordState => {
@@ -61,6 +65,10 @@ const recordReducer = (state = initialState, action: Action): RecordState => {
       );
       return { ...state, records: newRecords };
     }
+    case ADD_RECORD:
+      return { ...state, records: [...state.records, payload] };
+    case SHOW_ADD_RECORD:
+      return { ...state, showAddRecord: payload };
     default:
       return state;
   }

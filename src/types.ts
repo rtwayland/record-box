@@ -1,6 +1,6 @@
 type Artist = {
   name: string;
-  id: number;
+  id: number | string;
 };
 
 export type Record = {

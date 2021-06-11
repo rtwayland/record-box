@@ -1,13 +1,22 @@
 import styled from '@emotion/styled';
+import { useContext } from 'react';
+import { SHOW_ADD_RECORD } from '../../constants';
+import { store } from '../../store';
 import Search from './Search';
 
 const Nav = () => {
+  const [, dispatch] = useContext(store);
+  const showAddRecord = () => {
+    dispatch({ type: SHOW_ADD_RECORD, payload: true });
+  };
+
   return (
     <NavBar>
       <Logo>Record Box</Logo>
       <Search />
       {/* <Right>
       </Right> */}
+      <button onClick={showAddRecord}>Add +</button>
     </NavBar>
   );
 };
