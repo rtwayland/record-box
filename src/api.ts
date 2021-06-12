@@ -1,18 +1,18 @@
+import { INITIAL_DATA_URL } from './constants';
+import randomColor from './utils/randomColor';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
-import randomHex from 'random-hex-color';
 import { Record } from './types';
 
-const initialDataUrl =
-  'https://gist.githubusercontent.com/seanders/df38a92ffc4e8c56962e51b6e96e188f/raw/b032669142b7b57ede3496dffee5b7c16b8071e1/page1.json';
-
 export const getRecords = async (url?: string | null) => {
-  const { data } = await axios.get(url || initialDataUrl);
-  const results = data.results.map((record: Record) => ({
-    ...record,
-    id: uuid(),
-    albumColor: randomHex(),
-  }));
+  const { data } = await axios.get(url || INITIAL_DATA_URL);
+  const results = data.results.map((record: Record) => {
+    return {
+      ...record,
+      id: uuid(),
+      albumColor: randomColor(),
+    };
+  });
   const recordRes = { ...data, results };
   return recordRes;
 };

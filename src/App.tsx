@@ -51,7 +51,6 @@ const App = () => {
     <div>
       <Nav />
       <Container>
-        <h1>Records</h1>
         <Records loadMoreRecords={loadMoreRecords} />
       </Container>
       {showAddRecord && <Record modal />}
@@ -64,8 +63,10 @@ const Container = styled.div({
   padding: 24,
   boxSizing: 'border-box',
   maxWidth: 1450,
-  overflow: 'auto',
+  overflowY: 'auto',
+  overflowX: 'hidden',
   height: 'calc(100vh - 80px)',
+  backgroundColor: '#fafafa',
 });
 
 export default App;

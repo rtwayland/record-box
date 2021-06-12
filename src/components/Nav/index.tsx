@@ -33,7 +33,8 @@ const NavBar = styled.header({
   backgroundColor: '#fafafa',
   boxShadow: '0px 2px 4px 2px rgba(0, 0, 0, 0.05)',
   boxSizing: 'border-box',
-  zIndex: 1,
+  position: 'relative',
+  zIndex: 2,
 });
 
 const Logo = styled.div({
