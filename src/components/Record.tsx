@@ -14,6 +14,7 @@ import {
   UPDATE_RECORD,
 } from '../constants';
 import Vinyl from './Vinyl';
+import Button from './Button';
 
 const Record = ({
   record,
@@ -98,12 +99,16 @@ const Record = ({
             <Buttons>
               {!isEditing && (
                 <>
-                  <button onClick={handleDelete} title="Delete">
+                  <Button
+                    onClick={handleDelete}
+                    title="Delete"
+                    margin="0 4px 0 0"
+                  >
                     <MdDelete size={30} />
-                  </button>
-                  <button onClick={() => setIsEditing(true)} title="Edit">
+                  </Button>
+                  <Button onClick={() => setIsEditing(true)} title="Edit">
                     <MdEdit size={30} />
-                  </button>
+                  </Button>
                 </>
               )}
             </Buttons>
@@ -154,14 +159,14 @@ const Record = ({
                   />
                 </Label>
                 <FormButtons>
-                  <button onClick={handleCancel} title="Cancel">
+                  <Button padding="4px 0" onClick={handleCancel} title="Cancel">
                     {/* <MdCancel size={30} /> */}
                     Cancel
-                  </button>
-                  <button onClick={handleSave} title="Save">
+                  </Button>
+                  <Button padding="4px 0" onClick={handleSave} title="Save">
                     {/* <MdSave size={30} /> */}
                     Save
-                  </button>
+                  </Button>
                 </FormButtons>
               </Inputs>
             )}

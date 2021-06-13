@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { MdAddCircle } from 'react-icons/md';
 import { SHOW_ADD_RECORD } from '../../constants';
 import { store } from '../../store';
+import Button from '../Button';
 import Search from './Search';
 
 const Nav = () => {
@@ -15,9 +16,9 @@ const Nav = () => {
     <NavBar>
       <Logo>Record Box</Logo>
       <Search />
-      <button onClick={showAddRecord} title="Add">
+      <Button onClick={showAddRecord} title="Add">
         <MdAddCircle size={30} />
-      </button>
+      </Button>
     </NavBar>
   );
 };
